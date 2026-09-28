@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Generate Test</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">E</div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html" class="active">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analytics.html">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="questions-section">
+
+    <h1>Generate Test</h1>
+
+    <p>Select your test requirements</p>
+
+
+    <div class="card">
+
+        <label for="unit">
+            Unit
+        </label>
+
+        <select id="unit">
+
+            <option value="Unit 1">
+                Unit 1
+            </option>
+
+            <option value="Unit 2">
+                Unit 2
+            </option>
+
+        </select>
+
+
+        <br><br>
+
+
+        <label for="difficulty">
+            Difficulty
+        </label>
+
+        <select id="difficulty">
+
+            <option value="Easy">
+                Easy
+            </option>
+
+            <option value="Medium">
+                Medium
+            </option>
+
+            <option value="Hard">
+                Hard
+            </option>
+
+        </select>
+
+
+        <br><br>
+
+
+        <label for="count">
+            Number of Questions
+        </label>
+
+        <input
+                type="number"
+                id="count"
+                value="3"
+                min="1"
+        >
+
+
+        <br><br>
+
+
+        <button onclick="generateTest()">
+            Generate Test
+        </button>
+
+    </div>
+
+
+    <div id="result"></div>
+
+</section>
+
+
+<script>
+
+    function generateTest() {
+
+        const unit =
+            document.getElementById("unit").value;
+
+        const difficulty =
+            document.getElementById("difficulty").value;
+
+        const count =
+            parseInt(document.getElementById("count").value);
+
+
+        if (count <= 0) {
+
+            showError("Number of questions must be greater than 0.");
+
+            return;
+
+        }
+
+
+        let easyPercentage = 0;
+
+        let mediumPercentage = 0;
+
+        let hardPercentage = 0;
+
+
+        if (difficulty === "Easy") {
+
+            easyPercentage = 100;
+
+        }
+
+        else if (difficulty === "Medium") {
+
+            mediumPercentage = 100;
+
+        }
+
+        else if (difficulty === "Hard") {
+
+            hardPercentage = 100;
+
+        }
+
+
+        const testPaper = {
+
+            testName:
+                unit + " " + difficulty + " Test",
+
+            subject:
+                "DBMS",
+
+            unit:
+            unit,
+
+            questionCount:
+            count,
+
+            easyPercentage:
+            easyPercentage,
+
+            mediumPercentage:
+            mediumPercentage,
+
+            hardPercentage:
+            hardPercentage
+
+        };
+
+
+        console.log("Sending:", testPaper);
+
+
+        fetch("/test-papers", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json"
+
+            },
+
+            body:
+                JSON.stringify(testPaper)
+
+        })
+
+            .then(async response => {
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to create test"
+                    );
+
+                }
+
+
+                return data;
+
+            })
+
+
+            .then(data => {
+
+                document.getElementById("result").innerHTML = `
+
+            <div class="card">
+
+                <h2>
+                    Test Created Successfully! ✅
+                </h2>
+
+                <p>
+                    <strong>Test Name:</strong>
+                    ${data.testName}
+                </p>
+
+                <p>
+                    <strong>Subject:</strong>
+                    ${data.subject}
+                </p>
+
+                <p>
+                    <strong>Unit:</strong>
+                    ${data.unit}
+                </p>
+
+                <p>
+                    <strong>Difficulty:</strong>
+                    ${difficulty}
+                </p>
+
+                <p>
+                    <strong>Questions:</strong>
+                    ${data.questionCount}
+                </p>
+
+                <p>
+                    <strong>Test ID:</strong>
+                    ${data.id}
+                </p>
+
+                <br>
+
+                <a href="attempt.html?id=${data.id}">
+                    Take This Test →
+                </a>
+
+            </div>
+
+        `;
+
+            })
+
+
+            .catch(error => {
+
+                showError(error.message);
+
+                console.log(error);
+
+            });
+
+    }
+
+
+    function showError(message) {
+
+        document.getElementById("result").innerHTML = `
+
+        <div class="card">
+
+            <h2>
+                ❌ Could Not Create Test
+            </h2>
+
+            <p>
+                ${message}
+            </p>
+
+        </div>
+
+    `;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

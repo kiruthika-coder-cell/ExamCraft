@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                    radial-gradient(
+                            circle at 80% 10%,
+                            rgba(37,99,235,0.12),
+                            transparent 30%
+                    ),
+                    #070b16;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 72px;
+            padding: 0 6%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom:
+                    1px solid rgba(255,255,255,0.06);
+
+            background:
+                    rgba(7,11,22,0.85);
+
+            backdrop-filter: blur(18px);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #2563eb,
+                            #7c3aed
+                    );
+
+            color: white;
+            font-size: 17px;
+            font-weight: 900;
+
+            box-shadow:
+                    0 8px 25px rgba(37,99,235,0.3);
+        }
+
+        .brand-name {
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 11px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #60a5fa;
+        }
+
+        .profile {
+            padding: 8px 13px;
+            border-radius: 9px;
+
+            background: rgba(37,99,235,0.1);
+
+            border:
+                    1px solid rgba(96,165,250,0.15);
+
+            color: #93c5fd !important;
+        }
+
+        /* MAIN */
+
+        .dashboard {
+            padding: 45px 7% 80px;
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .welcome {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            margin-bottom: 32px;
+        }
+
+        .welcome-label {
+            color: #60a5fa;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 9px;
+        }
+
+        .welcome h1 {
+            font-size: 36px;
+            letter-spacing: -1.5px;
+        }
+
+        .welcome h1 span {
+            background:
+                    linear-gradient(
+                            90deg,
+                            #60a5fa,
+                            #a78bfa
+                    );
+
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .welcome p {
+            margin-top: 9px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .date-box {
+            padding: 12px 16px;
+
+            border-radius: 11px;
+
+            background:
+                    rgba(15,23,42,0.75);
+
+            border:
+                    1px solid rgba(148,163,184,0.1);
+
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        /* STAT CARDS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 17px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 23px;
+
+            border-radius: 16px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(15,23,42,0.85),
+                            rgba(8,13,26,0.85)
+                    );
+
+            border:
+                    1px solid rgba(148,163,184,0.09);
+
+            position: relative;
+            overflow: hidden;
+
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                    rgba(96,165,250,0.2);
+
+            box-shadow:
+                    0 18px 45px rgba(0,0,0,0.25);
+        }
+
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+            height: 100px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(37,99,235,0.08);
+
+            right: -35px;
+            top: -35px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                    rgba(37,99,235,0.1);
+
+            color: #60a5fa;
+
+            font-size: 15px;
+        }
+
+        .stat-change {
+            color: #4ade80;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .stat-number {
+            margin-top: 18px;
+
+            font-size: 29px;
+            font-weight: 800;
+        }
+
+        .stat-title {
+            margin-top: 5px;
+
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        /* MAIN GRID */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            padding: 25px;
+
+            border-radius: 17px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(15,23,42,0.8),
+                            rgba(8,13,26,0.8)
+                    );
+
+            border:
+                    1px solid rgba(148,163,184,0.09);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .panel-subtitle {
+            color: #475569;
+            font-size: 9px;
+            margin-top: 5px;
+        }
+
+        .view-link {
+            color: #60a5fa;
+            font-size: 9px;
+            text-decoration: none;
+        }
+
+        /* DIFFICULTY */
+
+        .difficulty-container {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .donut {
+            width: 150px;
+            height: 150px;
+
+            border-radius: 50%;
+
+            background:
+                    conic-gradient(
+                            #22c55e 0 40%,
+                            #eab308 40% 75%,
+                            #ef4444 75% 100%
+                    );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .donut::before {
+            content: "";
+
+            width: 105px;
+            height: 105px;
+
+            border-radius: 50%;
+
+            background: #0b1120;
+
+            position: absolute;
+        }
+
+        .donut-text {
+            position: relative;
+            text-align: center;
+        }
+
+        .donut-text strong {
+            display: block;
+            font-size: 22px;
+        }
+
+        .donut-text span {
+            color: #64748b;
+            font-size: 8px;
+        }
+
+        .legend {
+            flex: 1;
+        }
+
+        .legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 17px;
+
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .legend-left {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-easy {
+            background: #22c55e;
+        }
+
+        .dot-medium {
+            background: #eab308;
+        }
+
+        .dot-hard {
+            background: #ef4444;
+        }
+
+        .legend-value {
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        /* QUICK ACTIONS */
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action {
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background:
+                    rgba(15,23,42,0.8);
+
+            border:
+                    1px solid rgba(148,163,184,0.08);
+
+            text-decoration: none;
+
+            transition: 0.3s;
+        }
+
+        .action:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                    rgba(96,165,250,0.25);
+        }
+
+        .action-icon {
+            font-size: 18px;
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+
+        .action h3 {
+            color: #e2e8f0;
+            font-size: 11px;
+        }
+
+        .action p {
+            color: #475569;
+            font-size: 8px;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        /* RECENT TESTS */
+
+        .recent-tests {
+            margin-top: 20px;
+        }
+
+        .test-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 15px 0;
+
+            border-bottom:
+                    1px solid rgba(148,163,184,0.07);
+        }
+
+        .test-row:last-child {
+            border-bottom: none;
+        }
+
+        .test-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .test-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background:
+                    rgba(124,58,237,0.1);
+
+            color: #a78bfa;
+            font-size: 14px;
+        }
+
+        .test-name {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .test-details {
+            color: #475569;
+            font-size: 8px;
+            margin-top: 4px;
+        }
+
+        .test-status {
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background:
+                    rgba(34,197,94,0.08);
+
+            color: #4ade80;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* USAGE PANEL */
+
+        .usage-item {
+            margin-bottom: 20px;
+        }
+
+        .usage-top {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 9px;
+        }
+
+        .usage-name {
+            color: #cbd5e1;
+        }
+
+        .usage-number {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        .usage-bar {
+            height: 5px;
+
+            background:
+                    #172033;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .usage-bar span {
+            display: block;
+            height: 100%;
+
+            border-radius: 10px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #2563eb,
+                            #7c3aed
+                    );
+        }
+
+        .usage-1 {
+            width: 85%;
+        }
+
+        .usage-2 {
+            width: 68%;
+        }
+
+        .usage-3 {
+            width: 52%;
+        }
+
+        .usage-4 {
+            width: 35%;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1000px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 700px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .nav-links a:not(.active) {
+                display: none;
+            }
+
+            .dashboard {
+                padding: 30px 5% 60px;
+            }
+
+            .welcome {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .welcome h1 {
+                font-size: 29px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .difficulty-container {
+                flex-direction: column;
+            }
+
+            .donut {
+                width: 130px;
+                height: 130px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">E</div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+    <div class="nav-links">
+
+        <a href="dashboard.html" class="active">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analysis.html">
+            Analysis
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="dashboard">
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <div>
+
+            <div class="welcome-label">
+                EXAMCRAFT CONTROL CENTER
+            </div>
+
+            <h1>
+                Welcome back,
+                <span>Kiruthika.</span>
+            </h1>
+
+            <p>
+                Monitor your question bank, tests and assessment activity.
+            </p>
+
+        </div>
+
+        <div class="date-box">
+            ● System Online &nbsp; | &nbsp; 28 Sep 2026
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats-grid">
+
+        <!-- TOTAL QUESTIONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ◈
+                </div>
+
+                <div class="stat-change">
+                    +12%
+                </div>
+
+            </div>
+
+            <div class="stat-number" id="totalQuestions">
+                0
+            </div>
+
+            <div class="stat-title">
+                Total Questions
+            </div>
+
+        </div>
+
+
+        <!-- TEST PAPERS -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ✦
+                </div>
+
+                <div class="stat-change">
+                    +5%
+                </div>
+
+            </div>
+
+            <div class="stat-number">
+                1
+            </div>
+
+            <div class="stat-title">
+                Test Papers
+            </div>
+
+        </div>
+
+
+        <!-- ATTEMPTS -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+                <div class="stat-change">
+                    +8%
+                </div>
+
+            </div>
+
+            <div class="stat-number">
+                0
+            </div>
+
+            <div class="stat-title">
+                Attempts
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM HEALTH -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ◎
+                </div>
+
+                <div class="stat-change">
+                    LIVE
+                </div>
+
+            </div>
+
+            <div class="stat-number">
+                100%
+            </div>
+
+            <div class="stat-title">
+                System Health
+            </div>
+
+        </div>
+
+    </section>
+    <!-- MAIN CONTENT -->
+
+    <section class="main-grid">
+
+
+        <!-- LEFT COLUMN -->
+
+        <div>
+
+
+            <!-- DIFFICULTY -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Question Difficulty
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Distribution across your question bank
+                        </div>
+
+                    </div>
+
+                    <a href="questions.html"
+                       class="view-link">
+                        View Questions →
+                    </a>
+
+                </div>
+
+
+                <div class="difficulty-container">
+
+
+                    <div class="donut">
+
+                        <div class="donut-text">
+
+                            <strong>
+                                4
+                            </strong>
+
+                            <span>
+                                QUESTIONS
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="legend">
+
+
+                        <div class="legend-row">
+
+                            <div class="legend-left">
+
+                                <span class="legend-dot dot-easy"></span>
+
+                                Easy
+
+                            </div>
+
+                            <span class="legend-value">
+                                3
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-row">
+
+                            <div class="legend-left">
+
+                                <span class="legend-dot dot-medium"></span>
+
+                                Medium
+
+                            </div>
+
+                            <span class="legend-value">
+                                1
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-row">
+
+                            <div class="legend-left">
+
+                                <span class="legend-dot dot-hard"></span>
+
+                                Hard
+
+                            </div>
+
+                            <span class="legend-value">
+                                0
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT TESTS -->
+
+            <div class="panel recent-tests">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Recent Test Papers
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Recently generated assessments
+                        </div>
+
+                    </div>
+
+                    <a href="generate.html"
+                       class="view-link">
+                        + Create Test
+                    </a>
+
+                </div>
+
+
+                <div class="test-row">
+
+                    <div class="test-info">
+
+                        <div class="test-icon">
+                            ✦
+                        </div>
+
+                        <div>
+
+                            <div class="test-name">
+                                DBMS Practice Test
+                            </div>
+
+                            <div class="test-details">
+                                DBMS • Unit 1 • 3 Questions
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="test-status">
+                        Ready
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+
+        <div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Quick Actions
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Frequently used features
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+
+                    <a href="questions.html"
+                       class="action">
+
+                        <div class="action-icon">
+                            ＋
+                        </div>
+
+                        <h3>
+                            Add Question
+                        </h3>
+
+                        <p>
+                            Create and manage questions
+                        </p>
+
+                    </a>
+
+
+                    <a href="generate.html"
+                       class="action">
+
+                        <div class="action-icon">
+                            ⚡
+                        </div>
+
+                        <h3>
+                            Generate Test
+                        </h3>
+
+                        <p>
+                            Create a new test paper
+                        </p>
+
+                    </a>
+
+
+                    <a href="attempts.html"
+                       class="action">
+
+                        <div class="action-icon">
+                            ✓
+                        </div>
+
+                        <h3>
+                            View Attempts
+                        </h3>
+
+                        <p>
+                            Check assessment results
+                        </p>
+
+                    </a>
+
+
+                    <a href="analysis.html"
+                       class="action">
+
+                        <div class="action-icon">
+                            ◎
+                        </div>
+
+                        <h3>
+                            Analytics
+                        </h3>
+
+                        <p>
+                            View question usage
+                        </p>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- QUESTION USAGE -->
+
+            <div class="panel recent-tests">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Question Usage
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Most frequently used questions
+                        </div>
+
+                    </div>
+
+                    <a href="analysis.html"
+                       class="view-link">
+                        View →
+                    </a>
+
+                </div>
+
+
+                <div class="usage-item">
+
+                    <div class="usage-top">
+
+                        <span class="usage-name">
+                            Question 1
+                        </span>
+
+                        <span class="usage-number">
+                            85%
+                        </span>
+
+                    </div>
+
+                    <div class="usage-bar">
+                        <span class="usage-1"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="usage-item">
+
+                    <div class="usage-top">
+
+                        <span class="usage-name">
+                            Question 2
+                        </span>
+
+                        <span class="usage-number">
+                            68%
+                        </span>
+
+                    </div>
+
+                    <div class="usage-bar">
+                        <span class="usage-2"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="usage-item">
+
+                    <div class="usage-top">
+
+                        <span class="usage-name">
+                            Question 3
+                        </span>
+
+                        <span class="usage-number">
+                            52%
+                        </span>
+
+                    </div>
+
+                    <div class="usage-bar">
+                        <span class="usage-3"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="usage-item">
+
+                    <div class="usage-top">
+
+                        <span class="usage-name">
+                            Question 4
+                        </span>
+
+                        <span class="usage-number">
+                            35%
+                        </span>
+
+                    </div>
+
+                    <div class="usage-bar">
+                        <span class="usage-4"></span>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- QUESTION COUNT API -->
+
+<script>
+
+    async function loadQuestionCount() {
+
+        try {
+
+            const response =
+                await fetch("/questions/count");
+
+            const count =
+                await response.json();
+
+            document.getElementById("totalQuestions").textContent =
+                count;
+
+        } catch (error) {
+
+            console.error(
+                "Question count error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    loadQuestionCount();
+
+</script>
+
+
+</body>
+
+</html>

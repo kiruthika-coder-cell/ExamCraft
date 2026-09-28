@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Attempts</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .attempts-section {
+            padding: 40px 7%;
+        }
+
+        .attempt-card {
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .attempt-card h2 {
+            margin-top: 0;
+        }
+
+        .attempt-info {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .badge {
+            background: #252a43;
+            padding: 7px 12px;
+            border-radius: 20px;
+        }
+
+        .delete-btn {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            E
+        </div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html" class="active">
+            Attempts
+        </a>
+
+        <a href="analytics.html">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="attempts-section">
+
+    <h1>
+        Attempts
+    </h1>
+
+    <p>
+        Student test submission history
+    </p>
+
+
+    <div id="attemptList">
+
+        <div class="empty">
+            Loading attempts...
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+
+    async function loadAttempts() {
+
+        try {
+
+            const response =
+                await fetch("/attempts");
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load attempts"
+                );
+
+            }
+
+
+            const attempts =
+                await response.json();
+
+
+            const container =
+                document.getElementById(
+                    "attemptList"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (attempts.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        No attempts found.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            attempts.forEach(
+                attempt => {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "attempt-card";
+
+
+                    card.innerHTML = `
+
+                        <h2>
+                            ${attempt.studentName}
+                        </h2>
+
+
+                        <div class="attempt-info">
+
+                            <span class="badge">
+                                Attempt ID:
+                                ${attempt.id}
+                            </span>
+
+                            <span class="badge">
+                                Score:
+                                ${attempt.score}
+                                /
+                                ${attempt.totalQuestions}
+                            </span>
+
+                            <span class="badge">
+                                Result:
+                                ${attempt.result}
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteAttempt(${attempt.id})">
+
+                            Delete Attempt
+
+                        </button>
+
+                    `;
+
+
+                    container.appendChild(card);
+
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "attemptList"
+            ).innerHTML = `
+
+                <div class="empty">
+
+                    Unable to load attempts.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    async function deleteAttempt(id) {
+
+        if (
+            !confirm(
+                "Are you sure you want to delete this attempt?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/attempts/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Delete failed"
+                );
+
+            }
+
+
+            alert(
+                "Attempt deleted successfully!"
+            );
+
+
+            loadAttempts();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to delete attempt."
+            );
+
+        }
+
+    }
+
+
+    loadAttempts();
+
+</script>
+
+
+</body>
+
+</html>

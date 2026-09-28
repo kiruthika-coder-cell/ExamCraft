@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft | Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background:
+                    radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.18), transparent 30%),
+                    radial-gradient(circle at 85% 80%, rgba(124, 58, 237, 0.16), transparent 30%),
+                    #080d1a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .background-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+        }
+
+        .login-wrapper {
+            width: 950px;
+            max-width: 92%;
+            min-height: 560px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            background: rgba(15, 23, 42, 0.78);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 28px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-section {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(37, 99, 235, 0.16),
+                            rgba(124, 58, 237, 0.08)
+                    );
+            border-right: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 55px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            font-size: 21px;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-section h1 {
+            font-size: 48px;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+        }
+
+        .brand-section h1 span {
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-section p {
+            color: #94a3b8;
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 430px;
+        }
+
+        .features {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .login-section {
+            padding: 55px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-section h2 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 35px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 9px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 14px 15px 14px 43px;
+            border: 1px solid #263247;
+            border-radius: 11px;
+            outline: none;
+            background: #0b1220;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .input-box input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 15px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 12px 25px rgba(37,99,235,0.22);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(37,99,235,0.3);
+        }
+
+        .login-message {
+            min-height: 20px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .register-text {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+        .register-text a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .login-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-section {
+                display: none;
+            }
+
+            .login-section {
+                padding: 45px 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="background-grid"></div>
+
+<div class="login-wrapper">
+
+    <section class="brand-section">
+
+        <div class="logo">
+            <div class="logo-icon">E</div>
+            <div class="logo-text">ExamCraft</div>
+        </div>
+
+        <h1>
+            Build.
+            <br>
+            <span>Practice.</span>
+            <br>
+            Evaluate.
+        </h1>
+
+        <p>
+            A smart exam generation platform for creating,
+            practicing and evaluating customized tests with ease.
+        </p>
+
+        <div class="features">
+            <div class="feature">Question Bank</div>
+            <div class="feature">Smart Tests</div>
+            <div class="feature">Auto Evaluation</div>
+            <div class="feature">Analytics</div>
+        </div>
+
+    </section>
+
+
+    <section class="login-section">
+
+        <h2>Welcome back</h2>
+
+        <p class="subtitle">
+            Sign in to continue to your ExamCraft workspace.
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>Username</label>
+
+                <div class="input-box">
+                    <span>◉</span>
+                    <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                            required>
+                </div>
+            </div>
+
+
+            <div class="input-group">
+                <label>Password</label>
+
+                <div class="input-box">
+                    <span>●</span>
+                    <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            required>
+                </div>
+            </div>
+
+
+            <button type="submit" class="login-btn">
+                Sign In →
+            </button>
+
+            <div id="loginMessage" class="login-message"></div>
+
+        </form>
+
+
+        <div class="register-text">
+            New to ExamCraft?
+            <a href="#">Create an account</a>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("loginMessage");
+
+        if (username.trim() === "" || password.trim() === "") {
+            message.style.color = "#f87171";
+            message.innerText = "Please enter username and password.";
+            return;
+        }
+
+        message.style.color = "#60a5fa";
+        message.innerText = "Login successful!";
+
+        setTimeout(function() {
+            window.location.href = "dashboard.html";
+        }, 700);
+    });
+</script>
+
+</body>
+</html>

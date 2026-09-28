@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Take Test</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .test-section {
+            padding: 40px 7%;
+        }
+
+        .test-header {
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .question-card {
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .option {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #333750;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: #20243a;
+        }
+
+        .submit-btn {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .error {
+            color: #ff6b6b;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            E
+        </div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analytics.html">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="test-section">
+
+
+    <div
+            id="testHeader"
+            class="test-header">
+
+        Loading test...
+
+    </div>
+
+
+    <div id="questionsContainer">
+
+    </div>
+
+
+    <button
+            id="submitBtn"
+            class="submit-btn"
+            onclick="submitTest()"
+            style="display:none;">
+
+        Submit Test
+
+    </button>
+
+
+    <p
+            id="errorMessage"
+            class="error">
+    </p>
+
+
+</section>
+
+
+<script>
+
+
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const testId =
+        urlParams.get("id");
+
+
+    let testPaper = null;
+
+    let questions = [];
+
+
+    // LOAD TEST
+
+    async function loadTest() {
+
+        if (!testId) {
+
+            document.getElementById(
+                "errorMessage"
+            ).textContent =
+                "No test ID provided.";
+
+            return;
+
+        }
+
+
+        try {
+
+            const testResponse =
+                await fetch(
+                    "/test-papers/" + testId
+                );
+
+
+            if (!testResponse.ok) {
+
+                throw new Error(
+                    "Test paper not found"
+                );
+
+            }
+
+
+            testPaper =
+                await testResponse.json();
+
+
+            document.getElementById(
+                "testHeader"
+            ).innerHTML = `
+
+                <h1>
+                    ${testPaper.testName}
+                </h1>
+
+                <p>
+                    <strong>Subject:</strong>
+                    ${testPaper.subject}
+                </p>
+
+                <p>
+                    <strong>Unit:</strong>
+                    ${testPaper.unit}
+                </p>
+
+                <p>
+                    <strong>Total Questions:</strong>
+                    ${testPaper.questionCount}
+                </p>
+
+            `;
+
+
+            const questionResponse =
+                await fetch(
+                    "/test-papers/" +
+                    testId +
+                    "/questions"
+                );
+
+
+            if (!questionResponse.ok) {
+
+                throw new Error(
+                    "Questions could not be loaded"
+                );
+
+            }
+
+
+            questions =
+                await questionResponse.json();
+
+
+            displayQuestions();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "errorMessage"
+            ).textContent =
+                error.message;
+
+        }
+
+    }
+
+
+    // DISPLAY QUESTIONS
+
+    function displayQuestions() {
+
+        const container =
+            document.getElementById(
+                "questionsContainer"
+            );
+
+
+        container.innerHTML = "";
+
+
+        questions.forEach(
+            (question, index) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "question-card";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        Question ${index + 1}
+                    </h3>
+
+                    <p>
+                        <strong>
+                            ${question.questionText}
+                        </strong>
+                    </p>
+
+
+                    <label class="option">
+
+                        <input
+                            type="radio"
+                            name="question-${question.id}"
+                            value="A"
+                        >
+
+                        A. ${question.optionA}
+
+                    </label>
+
+
+                    <label class="option">
+
+                        <input
+                            type="radio"
+                            name="question-${question.id}"
+                            value="B"
+                        >
+
+                        B. ${question.optionB}
+
+                    </label>
+
+
+                    <label class="option">
+
+                        <input
+                            type="radio"
+                            name="question-${question.id}"
+                            value="C"
+                        >
+
+                        C. ${question.optionC}
+
+                    </label>
+
+
+                    <label class="option">
+
+                        <input
+                            type="radio"
+                            name="question-${question.id}"
+                            value="D"
+                        >
+
+                        D. ${question.optionD}
+
+                    </label>
+
+                `;
+
+
+                container.appendChild(card);
+
+            }
+        );
+
+
+        document.getElementById(
+            "submitBtn"
+        ).style.display = "block";
+
+    }
+
+
+    // SUBMIT TEST
+
+    async function submitTest() {
+
+        const answers = [];
+
+
+        for (const question of questions) {
+
+            const selected =
+                document.querySelector(
+                    `input[name="question-${question.id}"]:checked`
+                );
+
+
+            if (!selected) {
+
+                alert(
+                    "Please answer all questions."
+                );
+
+                return;
+
+            }
+
+
+            answers.push(
+                selected.value
+            );
+
+        }
+
+
+        const requestData = {
+
+            attempt: {
+
+                studentName:
+                    "Kiruthika",
+
+                testPaperId:
+                    Number(testId),
+
+                totalQuestions:
+                questions.length
+
+            },
+
+            answers:
+            answers
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/attempts/submit",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                requestData
+                            )
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to submit test"
+                );
+
+            }
+
+
+            // GO TO RESULT PAGE
+
+            window.location.href =
+                "result.html?id=" +
+                data.id;
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "errorMessage"
+            ).textContent =
+                error.message;
+
+        }
+
+    }
+
+
+    // START
+
+    loadTest();
+
+</script>
+
+
+</body>
+
+</html>

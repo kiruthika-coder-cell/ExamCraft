@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Analytics</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .analytics-section {
+            padding: 40px 7%;
+        }
+
+        .analytics-card {
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .usage-row {
+            margin-bottom: 22px;
+        }
+
+        .usage-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .usage-bar {
+            width: 100%;
+            height: 10px;
+            background: #292d45;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            background: #6c63ff;
+            border-radius: 10px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            E
+        </div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analytics.html" class="active">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="analytics-section">
+
+    <h1>
+        Analytics
+    </h1>
+
+    <p>
+        Question usage frequency across generated test papers
+    </p>
+
+
+    <div class="analytics-card">
+
+        <h2>
+            Question Usage Frequency
+        </h2>
+
+        <div id="usageList">
+
+            <div class="empty">
+                Loading analytics...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    async function loadAnalytics() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/test-papers/usage-frequency"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load analytics"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            const container =
+                document.getElementById(
+                    "usageList"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (data.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        No question usage data yet.
+
+                        <br><br>
+
+                        Generate a test to create
+                        usage statistics.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const maxUsage =
+                Math.max(
+                    ...data.map(item =>
+                        Number(item[1])
+                    )
+                );
+
+
+            data.forEach(
+                (item, index) => {
+
+                    const questionId =
+                        item[0];
+
+                    const usage =
+                        Number(item[1]);
+
+
+                    const percentage =
+                        maxUsage === 0
+                            ? 0
+                            : (usage / maxUsage) * 100;
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "usage-row";
+
+
+                    row.innerHTML = `
+
+                        <div class="usage-header">
+
+                            <span>
+                                Question ID:
+                                ${questionId}
+                            </span>
+
+                            <strong>
+                                ${usage} uses
+                            </strong>
+
+                        </div>
+
+
+                        <div class="usage-bar">
+
+                            <div
+                                class="usage-fill"
+                                style="width:${percentage}%">
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+
+                    container.appendChild(row);
+
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "usageList"
+            ).innerHTML = `
+
+                <div class="empty">
+
+                    Unable to load analytics.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    loadAnalytics();
+
+</script>
+
+
+</body>
+
+</html>

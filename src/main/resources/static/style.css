@@ -1,0 +1,583 @@
+/* ================================
+   EXAMCRAFT - GLOBAL DARK THEME
+================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0f1a;
+    color: #f5f7ff;
+    min-height: 100vh;
+}
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+nav {
+    width: 100%;
+    min-height: 72px;
+    padding: 0 7%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #101525;
+    border-bottom: 1px solid #242a40;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #6c63ff;
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.brand-name {
+    font-size: 21px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links a {
+    color: #aeb6cc;
+    text-decoration: none;
+
+    padding: 10px 13px;
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    color: white;
+    background: #1a2033;
+}
+
+.nav-links a.active {
+    color: white;
+    background: #242a45;
+}
+
+.nav-links .profile {
+    color: #ff8f8f;
+}
+
+
+/* ================================
+   COMMON SECTIONS
+================================ */
+
+.questions-section,
+.test-section,
+.result-section,
+.attempts-section,
+.analytics-section,
+.papers-section {
+    max-width: 1250px;
+    margin: auto;
+    padding: 45px 6%;
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+h2,
+h3 {
+    color: #ffffff;
+}
+
+p {
+    color: #9da6bd;
+    line-height: 1.6;
+}
+
+
+/* ================================
+   COMMON CARD
+================================ */
+
+.card,
+.panel,
+.question-card,
+.paper-card,
+.attempt-card,
+.analytics-card,
+.result-card,
+.test-header {
+    background: #131827;
+    border: 1px solid #272d43;
+    border-radius: 16px;
+
+    box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card {
+    padding: 25px;
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+button,
+.add-btn,
+.submit-btn {
+    background: #6c63ff;
+    color: white;
+
+    border: none;
+    border-radius: 9px;
+
+    padding: 11px 19px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+button:hover,
+.add-btn:hover,
+.submit-btn:hover {
+    background: #8179ff;
+    transform: translateY(-1px);
+}
+
+
+/* ================================
+   INPUTS / SELECTS
+================================ */
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    background: #0e1321;
+    color: white;
+
+    border: 1px solid #30364d;
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.15);
+}
+
+input::placeholder {
+    color: #69728a;
+}
+
+option {
+    background: #131827;
+    color: white;
+}
+
+
+/* ================================
+   QUESTIONS
+================================ */
+
+.question-card {
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.question-card h3 {
+    color: #ffffff;
+    margin-bottom: 14px;
+}
+
+.question-card p {
+    margin: 8px 0;
+}
+
+.question-card strong {
+    color: #f5f7ff;
+}
+
+.question-meta {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+
+/* ================================
+   BADGES
+================================ */
+
+.badge,
+.result-status {
+    display: inline-block;
+
+    background: #22283d;
+    color: #cbd1e3;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+}
+
+
+/* ================================
+   FILTERS
+================================ */
+
+.filters {
+    display: flex;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.filters input {
+    max-width: 500px;
+}
+
+.filters select {
+    max-width: 190px;
+}
+
+
+/* ================================
+   OPTION RADIO BUTTONS
+================================ */
+
+.option {
+    display: block;
+
+    padding: 13px;
+
+    margin: 10px 0;
+
+    background: #0e1321;
+
+    border: 1px solid #30364d;
+    border-radius: 9px;
+
+    color: #d8dced;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.option:hover {
+    background: #1a2033;
+    border-color: #6c63ff;
+}
+
+.option input {
+    width: auto;
+    margin-right: 8px;
+}
+
+
+/* ================================
+   TEST PAPERS
+================================ */
+
+.paper-card {
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.paper-card h2 {
+    margin-bottom: 10px;
+}
+
+.paper-info,
+.attempt-info {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.take-btn {
+    display: inline-block;
+
+    background: #6c63ff;
+    color: white;
+
+    padding: 10px 18px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+}
+
+.take-btn:hover {
+    background: #8179ff;
+}
+
+
+/* ================================
+   DELETE BUTTON
+================================ */
+
+.delete-btn {
+    background: #c94b4b;
+}
+
+.delete-btn:hover {
+    background: #e05b5b;
+}
+
+
+/* ================================
+   ATTEMPTS
+================================ */
+
+.attempt-card {
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.attempt-card h2 {
+    margin-bottom: 10px;
+}
+
+
+/* ================================
+   ANALYTICS
+================================ */
+
+.analytics-card {
+    padding: 25px;
+    margin-top: 25px;
+}
+
+.usage-row {
+    margin: 22px 0;
+}
+
+.usage-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+
+    color: #dce1ef;
+}
+
+.usage-bar {
+    width: 100%;
+    height: 10px;
+
+    background: #272d43;
+
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.usage-fill {
+    height: 100%;
+
+    background: #6c63ff;
+
+    border-radius: 10px;
+}
+
+
+/* ================================
+   RESULT
+================================ */
+
+.result-section {
+    text-align: center;
+}
+
+.result-card {
+    max-width: 550px;
+
+    margin: 35px auto;
+
+    padding: 35px;
+}
+
+.result-card h1 {
+    margin-bottom: 12px;
+}
+
+.score {
+    color: #ffffff;
+
+    font-size: 52px;
+    font-weight: bold;
+
+    margin: 25px 0;
+}
+
+.result-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    margin-top: 25px;
+}
+
+.result-buttons a {
+    background: #6c63ff;
+    color: white;
+
+    padding: 11px 18px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+}
+
+.result-buttons a:hover {
+    background: #8179ff;
+}
+
+
+/* ================================
+   EMPTY / ERROR
+================================ */
+
+.empty {
+    text-align: center;
+
+    padding: 45px;
+
+    color: #8e97ad;
+
+    background: #131827;
+
+    border: 1px solid #272d43;
+
+    border-radius: 15px;
+}
+
+.error {
+    color: #ff7373;
+    margin-top: 15px;
+}
+
+
+/* ================================
+   LINKS
+================================ */
+
+a {
+    color: #8f87ff;
+}
+
+a:hover {
+    color: #aaa4ff;
+}
+
+
+/* ================================
+   SCROLLBAR
+================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0b0f1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30364d;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6c63ff;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 900px) {
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 5%;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+    .questions-section,
+    .test-section,
+    .result-section,
+    .attempts-section,
+    .analytics-section,
+    .papers-section {
+        padding: 30px 5%;
+    }
+
+    .filters {
+        flex-direction: column;
+    }
+
+}

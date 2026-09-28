@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Test Papers</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .papers-section {
+            padding: 40px 7%;
+        }
+
+        .paper-card {
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .paper-card h2 {
+            margin-top: 0;
+        }
+
+        .paper-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .badge {
+            background: #252a43;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .take-btn {
+            display: inline-block;
+            background: #6c63ff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            E
+        </div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html" class="active">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analytics.html">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="papers-section">
+
+    <h1>
+        Test Papers
+    </h1>
+
+    <p>
+        All generated test papers in ExamCraft
+    </p>
+
+
+    <div id="paperList">
+
+        <div class="empty">
+            Loading test papers...
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    async function loadTestPapers() {
+
+        try {
+
+            const response =
+                await fetch("/test-papers");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load test papers"
+                );
+
+            }
+
+
+            const papers =
+                await response.json();
+
+
+            const container =
+                document.getElementById(
+                    "paperList"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (papers.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        No test papers found.
+
+                        <br><br>
+
+                        <a href="generate.html">
+                            Generate your first test →
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            papers.forEach(paper => {
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "paper-card";
+
+
+                card.innerHTML = `
+
+                    <h2>
+                        ${paper.testName}
+                    </h2>
+
+
+                    <div class="paper-info">
+
+                        <span class="badge">
+                            Subject: ${paper.subject}
+                        </span>
+
+                        <span class="badge">
+                            Unit: ${paper.unit}
+                        </span>
+
+                        <span class="badge">
+                            Questions: ${paper.questionCount}
+                        </span>
+
+                        <span class="badge">
+                            Easy: ${paper.easyPercentage}%
+                        </span>
+
+                        <span class="badge">
+                            Medium: ${paper.mediumPercentage}%
+                        </span>
+
+                        <span class="badge">
+                            Hard: ${paper.hardPercentage}%
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        class="take-btn"
+                        href="attempt.html?id=${paper.id}">
+
+                        Take Test →
+
+                    </a>
+
+                `;
+
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "paperList"
+            ).innerHTML = `
+
+                <div class="empty">
+
+                    Unable to load test papers.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    loadTestPapers();
+
+</script>
+
+
+</body>
+
+</html>

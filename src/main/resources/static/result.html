@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamCraft - Result</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .result-section {
+            padding: 50px 7%;
+            text-align: center;
+        }
+
+        .result-card {
+            max-width: 550px;
+            margin: 30px auto;
+            background: #171a2b;
+            border: 1px solid #292d45;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        .result-card h1 {
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .result-status {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: #252a43;
+            margin: 10px;
+        }
+
+        .result-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .result-buttons a,
+        .result-buttons button {
+            padding: 11px 18px;
+            border-radius: 9px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            background: #6c63ff;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            E
+        </div>
+
+        <div class="brand-name">
+            ExamCraft
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="questions.html">
+            Questions
+        </a>
+
+        <a href="generate.html">
+            Generate Test
+        </a>
+
+        <a href="test-paper.html">
+            Test Papers
+        </a>
+
+        <a href="attempts.html">
+            Attempts
+        </a>
+
+        <a href="analytics.html">
+            Analytics
+        </a>
+
+        <a href="login.html" class="profile">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="result-section">
+
+
+    <div class="result-card">
+
+        <h1>
+            Test Result
+        </h1>
+
+        <p id="studentName">
+            Loading...
+        </p>
+
+
+        <div
+                id="score"
+                class="score">
+
+            --
+
+        </div>
+
+
+        <p>
+            Total Questions:
+            <strong id="totalQuestions">
+                --
+            </strong>
+        </p>
+
+
+        <div
+                id="result"
+                class="result-status">
+
+            Loading...
+
+        </div>
+
+
+        <div class="result-buttons">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="attempts.html">
+                View Attempts
+            </a>
+
+            <a href="generate.html">
+                Take Another Test
+            </a>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<script>
+
+
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const attemptId =
+        urlParams.get("id");
+
+
+    async function loadResult() {
+
+        if (!attemptId) {
+
+            document.getElementById(
+                "studentName"
+            ).innerText =
+                "Attempt ID Missing";
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/attempts/" + attemptId
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Attempt not found"
+                );
+
+            }
+
+
+            const attempt =
+                await response.json();
+
+
+            document.getElementById(
+                "studentName"
+            ).innerText =
+                "Congratulations, " +
+                attempt.studentName + "!";
+
+
+            document.getElementById(
+                "score"
+            ).innerText =
+                attempt.score +
+                " / " +
+                attempt.totalQuestions;
+
+
+            document.getElementById(
+                "totalQuestions"
+            ).innerText =
+                attempt.totalQuestions;
+
+
+            document.getElementById(
+                "result"
+            ).innerText =
+                attempt.result;
+
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "studentName"
+            ).innerText =
+                "Unable to load result";
+
+        }
+
+    }
+
+
+    loadResult();
+
+</script>
+
+
+</body>
+
+</html>
